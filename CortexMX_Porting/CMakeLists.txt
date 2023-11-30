@@ -1,0 +1,14 @@
+cmake_minimum_required(VERSION 3.25.0)
+
+
+set(PORTING_SRC_FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/cortexmx_porting.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/Core/${ARMCMX}/system_${ARMCMX}.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/Core/${ARMCMX}/startup_${ARMCMX}.c
+    PARENT_SCOPE)
+
+set(PORTING_INC_FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/Core/${ARMCMX}/
+    ${CMAKE_CURRENT_SOURCE_DIR}/Core/common/
+    PARENT_SCOPE)
