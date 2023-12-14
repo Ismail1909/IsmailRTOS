@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.25.0)
+cmake_minimum_required(VERSION 3.28.0)
 ################################################################################
  # @file           :  CMakeLists.txt
  # @author         : Ismail Amr @ learn-in-depth.com : Mastering Embedded Systems by Eng. Keroles Shenoda
@@ -73,8 +73,8 @@ target_include_directories(${EXE_NAME} PUBLIC
                            ${PORTING_INC_FILES}
 )
 
-target_link_options(${EXE_NAME} PRIVATE
-                    -T ${CMAKE_SOURCE_DIR}/linker_script.ld
+target_link_options(${EXE_NAME} BEFORE
+                    PUBLIC -T ${CMAKE_SOURCE_DIR}/linker_script.ld 
 )
 
 add_custom_command(TARGET ${EXE_NAME}

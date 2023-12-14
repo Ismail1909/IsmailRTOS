@@ -12,27 +12,47 @@
 __attribute__((naked)) void SVC_Handler(void)
 {
 
-	__asm("MRS R0, MSP  \n\t"
-		"B SVC_Handler_C "
-		);
+#if(defined(ARMCM0) || defined(ARMCM0plus))
+
+	__asm volatile("TST LR, #0X04  \n\t" // test if the bit 2 of LR is set by bitwise AND
+				   "BNE psp \n\t" // if the bit is not set, Z flag is raised else the Z flag is not raised.
+		           "MRSEQ R0, MSP \n\t" //Load the value of MSP to R0
+				   "B endif \n\t"
+		           "psp: MRSNE R0, PSP \n\t" //Load the value of PSP to R0
+		           "endif: B Kernel_SVC_Handler "
+				   );
+
+#else
+	__asm volatile("TST LR, #0X04  \n\t" // test if the bit 2 of LR is set by bitwise AND
+				   "ITE EQ \n\t" // if the bit is not set, Z flag is raised else the Z flag is not raised.
+		           "MRSEQ R0, MSP \n\t" //Load the value of MSP to R0
+		           "MRSNE R0, PSP \n\t" //Load the value of PSP to R0
+		           "B Kernel_SVC_Handler "
+				   );
+#endif
 }
 
 
-int SVC_Handler_C(int* stackframe_ptr )
+
+void SystickTimer_init(uint16_t msTime)
 {
-	uint8_t service_num = (uint8_t)(*(((uint8_t*)stackframe_ptr[6])-2)); /* Access the stacked PC address then decrement by 2 bytes to 
-																		 get the constant with SVC instruction */
-	switch (service_num)
-	{
-	case 1: //Add
-		stackframe_ptr[3] = stackframe_ptr[1] + stackframe_ptr[2]; // R0 = R1+R2
-		break;
-	case 2: //Sub
-		stackframe_ptr[3] = stackframe_ptr[1] - stackframe_ptr[2]; // R0 = R1-R2
-	case 3: //Mul
-		stackframe_ptr[3] = stackframe_ptr[1] * stackframe_ptr[2]; // R0 = R1*R2
-		break;
-	}																
+	// convert time in ms to ticks
+	uint32_t ticks;
+
+
+	/* 8000000 F >> 1 tick
+	 * TIME*1000   F >> ? tick
+	 *1/F s >> tick
+		  s >> ? ticks
+						s
+						---- = s*F = ticks
+						1/F
+	 */
+
+	ticks = SystemCoreClock*(msTime*0.001); //Floating point ??
+
+	//Timer init ??
+	SysTick_Config(ticks);
 }
 
 

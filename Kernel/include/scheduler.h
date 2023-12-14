@@ -10,12 +10,19 @@
 #define SCHEDULER_H_
 
 #include "fifo.h"
+#include "kernel_cfg.h"
 
 FIFO_Buf_t Ready_QUEUE ;
 
-void update_ScheduleTable();
+TCB* Ready_QUEUE_FIFO[MAX_NUM_OF_TASKS]; //Description + Macro.
 
-void sortTasks();
+TCB* schTable[MAX_NUM_OF_TASKS];
+
+uint32_t* schedule_activeTasks;
+
+void Schedule_update_Table(void);
+
+TCB* Schedule_getNextTask(TCB* currTask);
 
 
 #endif /* SCHEDULER_H_ */

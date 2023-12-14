@@ -6,28 +6,23 @@
  * www.learn-in-depth.com
  *******************************************************************************/
 
-/*
- * fifo.h
- *
- *  Created on: Nov 26, 2023
- *
- *  Author:
- */
-
 #ifndef FIFO_H_
 #define FIFO_H_
+
+#include<stdint.h>
+#include<stdlib.h>
 
 typedef struct tcb
 {
 	unsigned int Stack_Size;
 	void (*p_TaskEntry)(void); //pointer to Task C Function
-	unsigned int _S_PSP_Task ;
-	unsigned int _E_PSP_Task ;
-	unsigned int* Current_PSP ;
-	unsigned char priority;
-	unsigned char AutoStart;
-	unsigned char period;
-	unsigned char TaskName[29] ;
+	uint32_t _S_PSP_Task ;
+	uint32_t _E_PSP_Task ;
+	uint32_t* Current_PSP ;
+	uint8_t priority;
+	uint8_t AutoStart;
+	uint8_t period;
+	uint8_t TaskName[29] ;
 	enum{
 		Dormant,
 		Ready,
@@ -40,12 +35,13 @@ struct{
 			Enable,
 			Disable
 		}Blocking;
-		unsigned int Ticks_Count ;
+		uint8_t Ticks_Count ;
 	}TimingWaiting;
 
 }TCB;
 
 #define element_type TCB*
+
 typedef struct{
 	unsigned int counter;
 	element_type* head;

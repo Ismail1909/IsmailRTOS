@@ -11,12 +11,16 @@
 
 #include"cortexmx_porting.h"
 
+
 typedef uint32_t* TaskHandle;
+
+#define TaskFunction void(*f_ptr)(void)
 
 typedef enum {
 	NoError,
 	Ready_Queue_init_error,
 	Task_exceeded_StackSize,
+	Max_num_of_tasks_exceeded,
 	MutexisReacedToMaxNumberOfUsers
 
 }RTOS_errorID;
@@ -24,7 +28,7 @@ typedef enum {
 // User APIs
 RTOS_errorID RTOS_init();
 
-RTOS_errorID RTOS_CreateTask(uint32_t*  taskFunction, uint8_t priority, uint8_t period, char* taskName, TaskHandle handle);
+RTOS_errorID RTOS_CreateTask(void(*taskFunction)(void) , uint8_t size, uint8_t priority, uint8_t period, char* taskName, TaskHandle handle);
 
 void RTOS_ActivateTask (TaskHandle handle);
 

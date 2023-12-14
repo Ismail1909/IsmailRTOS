@@ -9,7 +9,6 @@
 #ifndef TIMER_H_
 #define TIMER_H_
 
-void SystickTimer_init();
 
 void update_WaitingTime();
 

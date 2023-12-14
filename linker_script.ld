@@ -33,7 +33,7 @@
   </h>
   -----------------------------------------------------------------------------*/
 __ROM_BASE = 0x00000000;
-__ROM_SIZE = 0x00040000;
+__ROM_SIZE = 0x20000000;
 
 /*--------------------- Embedded RAM Configuration ----------------------------
   <h> RAM Configuration
@@ -42,7 +42,7 @@ __ROM_SIZE = 0x00040000;
   </h>
  -----------------------------------------------------------------------------*/
 __RAM_BASE = 0x20000000;
-__RAM_SIZE = 0x00020000;
+__RAM_SIZE = 0x20000000;
 
 /*--------------------- Stack / Heap Configuration ----------------------------
   <h> Stack / Heap Configuration
@@ -50,7 +50,8 @@ __RAM_SIZE = 0x00020000;
     <o1> Heap Size (in Bytes) <0x0-0xFFFFFFFF:8>
   </h>
   -----------------------------------------------------------------------------*/
-__STACK_SIZE = 0x00000400;
+
+/*__STACK_SIZE = 0xC00;*/
 __HEAP_SIZE  = 0x00000C00;
 
 /*
@@ -281,14 +282,12 @@ SECTIONS
     __HeapLimit = .;
   } > RAM
 
-  .stack (ORIGIN(RAM) + LENGTH(RAM) - __STACK_SIZE) (COPY) :
+  .stack ALIGN(8) (COPY) :
   {
     . = ALIGN(8);
     __StackLimit = .;
-    . = . + __STACK_SIZE;
-    . = ALIGN(8);
-    __StackTop = .;
   } > RAM
+  __StackTop = ORIGIN(RAM) + LENGTH(RAM);
   PROVIDE(__stack = __StackTop);
 
   /* Check if data + heap + stack exceeds RAM limit */
